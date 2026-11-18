@@ -77,48 +77,66 @@ A complete Postman Testing Collection ([`Lab4_Authentication.postman_collection.
 
 ## Screenshots
 
-### 1. User Registration - Success (Status 200)
-Registers a new user into the database with a bcrypt hashed password.
-![POST /register/ Success](screenshots/01_register_success.png)
+### 1. User Registration - Success (POST /register/) — Status 200 OK
+Registers a new user into SQLite with bcrypt hashed password.
+![POST 1. User Registration - Success](screenshots/01_register_success.png)
 
 ---
 
-### 2. User Registration - Duplicate Username (Status 400)
-Rejects registration when the requested username is already taken.
-![POST /register/ Duplicate User](screenshots/02_register_duplicate.png)
+### 2. User Registration - Duplicate Username Error (POST /register/) — Status 400 Bad Request
+Rejects registration with `400 Bad Request` ("User already exists") when username already exists.
+![POST 2. User Registration - Duplicate User](screenshots/02_register_duplicate.png)
 
 ---
 
-### 3. User Login - Success with JWT Token (Status 200)
-Validates credentials using `bcrypt.compare` and returns a signed `{ jwt_token }`.
-![POST /login/ Success](screenshots/03_login_success.png)
+### 3. User Registration - Missing Fields Validation (POST /register/) — Status 400 Bad Request
+Rejects registration with `400 Bad Request` ("Please provide username, name, and password") when required fields are missing.
+![POST 3. User Registration - Missing Fields Validation](screenshots/03_register_missing_fields.png)
 
 ---
 
-### 4. User Login - Unknown User (Status 400)
-Returns `400 Bad Request` with `"Invalid user"` when username does not exist.
-![POST /login/ Invalid User](screenshots/04_login_unknown_user.png)
+### 4. User Login - Unknown User (POST /login/) — Status 400 Bad Request
+Returns `400 Bad Request` ("Invalid user") when username does not exist in the database.
+![POST 4. User Login - Unknown User](screenshots/04_login_unknown_user.png)
 
 ---
 
-### 5. User Login - Wrong Password (Status 400)
-Returns `400 Bad Request` with `"Invalid password"` when password does not match.
-![POST /login/ Invalid Password](screenshots/05_login_wrong_password.png)
+### 5. User Login - Wrong Password (POST /login/) — Status 400 Bad Request
+Compares password with `bcrypt.compare` and returns `400 Bad Request` ("Invalid password") on mismatch.
+![POST 5. User Login - Wrong Password](screenshots/05_login_wrong_password.png)
 
 ---
 
-### 6. JWT Token Decoded (jwt.io)
+### 6. User Login - Success with JWT Token (POST /login/) — Status 200 OK
+Validates credentials and returns `200 OK` with signed `{ jwt_token }`.
+![POST 6. User Login - Success with JWT Token](screenshots/06_login_success.png)
+
+---
+
+### 7. User Registration - No Trailing Slash (POST /register) — Status 200 OK
+Confirms routing consistency for requests without trailing slashes.
+![POST 7. User Registration - No Trailing Slash](screenshots/07_register_trailing_slash.png)
+
+---
+
+### 8. User Login - No Trailing Slash (POST /login) — Status 200 OK
+Confirms login route works seamlessly without trailing slashes and returns JWT token.
+![POST 8. User Login - No Trailing Slash](screenshots/08_login_trailing_slash.png)
+
+---
+
+### 9. JWT Token Decoded (jwt.io)
 Verification of the generated token on [jwt.io](https://jwt.io/):
 - **Header:** Algorithm (`HS256`) and Type (`JWT`)
 - **Payload:** Strictly contains `username` and `iat` (Passwords are **NEVER** in payload)
 - **Signature:** Verified using the constant secret key.
-![jwt.io Decoded Token](screenshots/06_jwt_io_decoded.png)
+![jwt.io Decoded Token](screenshots/09_jwt_io_decoded.png)
 
 ---
 
-### 7. SQLite Database View (Passwords Hashed)
+### 10. SQLite Database View (Passwords Hashed)
 Proves that passwords are encrypted using Bcrypt (`$2b$10$...`) and plain text passwords are never stored in the database.
-![Database View Hashed Passwords](screenshots/07_database_hashed_passwords.png)
+![Database View Hashed Passwords](screenshots/10_database_hashed_passwords.png)
 
 ---
 
