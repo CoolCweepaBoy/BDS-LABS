@@ -1,6 +1,15 @@
 # Lab 4: Registration, login and JWT
 
-**Pattan Ashraf Khan** - **252U1R5120** - **Section 2B (AI/DE)**
+---
+| Field | Details | Field | Details |
+| :--- | :--- | :--- | :--- |
+| **Student Name** | P. Ashraf Khan | | |
+| **Student Registration Number** | 252U1R5120 | **Class & Section** | AIDE - 2B & 313 |
+| **Study Level** <br>`UG/PG/Doctorate` | UG | **Year & Term** | II & II |
+| **Course** | Backend Development Fundamentals |
+| **Faculty Name** | Yugandhar Gurjalwar | | |
+
+---
 
 
 ## How to Run
