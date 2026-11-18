@@ -2,13 +2,6 @@
 
 **Pattan Ashraf Khan** - **252U1R5120** - **Section 2B (AI/DE)**
 
----
-
-## Live Link
-- **Public Deployment URL:** [https://bds-labs-lab04.onrender.com](https://bds-labs-lab04.onrender.com)
-> *Note:* In accordance with the lab guidelines, if running in a local evaluation environment, the server runs at `http://localhost:3000/`. Full Postman verification screenshots for all success and error scenarios are included below.
-
----
 
 ## How to Run
 
