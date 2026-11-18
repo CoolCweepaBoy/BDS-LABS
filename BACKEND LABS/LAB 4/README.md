@@ -1,14 +1,16 @@
 # Lab 4: Registration, login and JWT
 
-**Pattan Ashraf Khan** - **252U1R5120** - **Section 2B (AI/DE)**
+---
+| Field | Details | Field | Details |
+| :--- | :--- | :--- | :--- |
+| **Student Name** | P. Ashraf Khan | | |
+| **Student Registration Number** | 252U1R5120 | **Class & Section** | AIDE - 2B & 313 |
+| **Study Level** <br>`UG/PG/Doctorate` | UG | **Year & Term** | II & II |
+| **Course** | Backend Development Fundamentals |
+| **Faculty Name** | Yugandhar Gurjalwar | | |
 
 ---
 
-## Live Link
-- **Public Deployment URL:** [https://bds-labs-lab04.onrender.com](https://bds-labs-lab04.onrender.com)
-> *Note:* In accordance with the lab guidelines, if running in a local evaluation environment, the server runs at `http://localhost:3000/`. Full Postman verification screenshots for all success and error scenarios are included below.
-
----
 
 ## How to Run
 
@@ -36,6 +38,30 @@ npm start
 # Run the automated test suite (9 test cases covering all edge cases)
 npm test
 ```
+
+---
+
+## Testing Collection (Postman)
+
+A complete Postman Testing Collection ([`Lab4_Authentication.postman_collection.json`](Lab4_Authentication.postman_collection.json)) and Environment file ([`Lab4_Environment.postman_environment.json`](Lab4_Environment.postman_environment.json)) are included in this folder for API verification.
+
+### Included Test Requests & Validations:
+1. **Health Check (`GET /`)**: Asserts `200 OK` and checks API route documentation.
+2. **User Registration - Success (`POST /register/`)**: Asserts `200 OK` and `"User created successfully"`.
+3. **User Registration - Duplicate (`POST /register/`)**: Asserts `400 Bad Request` and `"User already exists"`.
+4. **User Registration - Validation (`POST /register/`)**: Asserts `400 Bad Request` on missing fields.
+5. **User Login - Unknown User (`POST /login/`)**: Asserts `400 Bad Request` and `"Invalid user"`.
+6. **User Login - Wrong Password (`POST /login/`)**: Asserts `400 Bad Request` and `"Invalid password"`.
+7. **User Login - Success (`POST /login/`)**: Asserts `200 OK`, validates `{ jwt_token }`, and saves `jwt_token` to collection variable.
+8. **Trailing Slash Variations (`POST /register` & `POST /login`)**: Verifies route handling without trailing slash.
+
+### How to Import & Run in Postman:
+1. Open **Postman**.
+2. Click **Import** (top left).
+3. Select or drag & drop `Lab4_Authentication.postman_collection.json` and `Lab4_Environment.postman_environment.json`.
+4. Select the **BDS Lab 4 - Localhost Environment** in the environment dropdown.
+5. Start the local server (`npm start` at `http://localhost:3000`).
+6. Click **Run collection** to run all automated tests.
 
 ---
 

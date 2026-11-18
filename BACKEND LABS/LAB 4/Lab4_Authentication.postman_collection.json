@@ -1,0 +1,418 @@
+{
+	"info": {
+		"_postman_id": "b96238b1-3ea9-42b8-bf9d-c5e317181c04",
+		"name": "BDS Lab 4 - Authentication & JWT Collection",
+		"description": "Comprehensive Postman test collection for Lab 4 (Backend Development Fundamentals): User registration, login with bcrypt password hashing, and JWT authentication.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0. Health Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response returns API welcome and endpoint list\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"message\");",
+							"    pm.expect(jsonData).to.have.property(\"endpoints\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Verifies that the server is online and running."
+			},
+			"response": []
+		},
+		{
+			"name": "1. User Registration - Success (POST /register/)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response body confirms User created successfully\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"User created successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"ashraf\",\n  \"name\": \"Pattan Ashraf Khan\",\n  \"password\": \"SecurePassword123!\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/register/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register",
+						""
+					]
+				},
+				"description": "Task 3: Registers a new user. The password is encrypted with bcrypt (salt rounds = 10) before saving in SQLite."
+			},
+			"response": []
+		},
+		{
+			"name": "2. User Registration - Duplicate Username Error (POST /register/)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response body confirms User already exists\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"User already exists\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"ashraf\",\n  \"name\": \"Pattan Ashraf Khan\",\n  \"password\": \"SecurePassword123!\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/register/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register",
+						""
+					]
+				},
+				"description": "Task 3: Rejects duplicate registration with 400 Bad Request when the username already exists."
+			},
+			"response": []
+		},
+		{
+			"name": "3. User Registration - Missing Fields Validation (POST /register/)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response asks for missing required fields\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Please provide username, name, and password\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"ashraf\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/register/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register",
+						""
+					]
+				},
+				"description": "Validation: Rejects request with 400 when required fields are missing."
+			},
+			"response": []
+		},
+		{
+			"name": "4. User Login - Unknown User (POST /login/)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response body confirms Invalid user\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Invalid user\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"unregistered_user_999\",\n  \"password\": \"SecurePassword123!\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login",
+						""
+					]
+				},
+				"description": "Task 4: Returns 400 Bad Request with 'Invalid user' when user does not exist."
+			},
+			"response": []
+		},
+		{
+			"name": "5. User Login - Wrong Password (POST /login/)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response body confirms Invalid password\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Invalid password\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"ashraf\",\n  \"password\": \"WrongPassword999\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login",
+						""
+					]
+				},
+				"description": "Task 4: Compares password using bcrypt.compare and returns 400 Bad Request with 'Invalid password' on mismatch."
+			},
+			"response": []
+		},
+		{
+			"name": "6. User Login - Success with JWT Token (POST /login/)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains jwt_token and stores in variable\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"jwt_token\");",
+							"    pm.expect(jsonData.jwt_token).to.be.a(\"string\");",
+							"    pm.expect(jsonData.jwt_token.length).to.be.above(20);",
+							"    pm.collectionVariables.set(\"jwt_token\", jsonData.jwt_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"ashraf\",\n  \"password\": \"SecurePassword123!\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login",
+						""
+					]
+				},
+				"description": "Task 4 & 5: Successful login returns 200 OK with { jwt_token } containing only username in payload."
+			},
+			"response": []
+		},
+		{
+			"name": "7. User Registration - No Trailing Slash (POST /register)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 400 (Route handled properly)\", function () {",
+							"    pm.expect([200, 400]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"test_student\",\n  \"name\": \"Student Test\",\n  \"password\": \"Pass123!\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register"
+					]
+				},
+				"description": "Confirms Express handles /register without trailing slash identically."
+			},
+			"response": []
+		},
+		{
+			"name": "8. User Login - No Trailing Slash (POST /login)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains jwt_token\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"jwt_token\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"test_student\",\n  \"password\": \"Pass123!\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Confirms Express handles /login without trailing slash identically."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
